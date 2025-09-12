@@ -1,14 +1,37 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
-import colors from "@/styles/colors";
 import defaultStyles from "@/styles/defaultStyles";
+import { useState } from 'react';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import colors from '../styles/colors';
 
 export default function Index() {
+
+  type dataType = {
+    id: string; // refer to the unique identifier 
+    title: string; // text we will show in the list
+  }
+
+  //using all caps bc DATA array won't change during its use
+  const DATA: dataType[] = [
+    {id: "1",title: "First Item"},
+    {id: "2",title: "Second Item"},
+    {id: "3",title: "Third Item"},
+    {id: "4",title: "Fourth Item"},
+  ];
+
+  // create a simple function telling me what was selected
+  const selectedList = (item: dataType) => {
+    console.log(item.title);
+    setSelectedId(item.id);
+  };
+
+  // add a state var to keep track of which id is elcted
+  const [selectedId, setSelectedId] = useState<string>("1");
   return (
     <View style={defaultStyles.container}>
       <View style={defaultStyles.titleContainer}>
@@ -16,7 +39,19 @@ export default function Index() {
       </View>
       <View style={[defaultStyles.textContainer, { flex: 1 }]}>
         <View style={styles.flatlist}>
-          <Text>This is where our list will go</Text>
+          <FlatList 
+          data = {DATA}
+          keyExtractor={(item: dataType) => item.id}
+          renderItem={({item})=>(
+            <TouchableOpacity onPress={() =>selectedList(item)}>
+              <View style={styles.flatlistRow}>
+                <Text>{item.title}</Text>
+              </View>
+            </TouchableOpacity>
+          )
+          }
+
+          />
         </View>
       </View>
     </View>
@@ -26,6 +61,10 @@ export default function Index() {
 const styles = StyleSheet.create({
   flatlist: {
     alignItems: "center",
+  },
+  flatlistRow: {
+    backgroundColor: colors.primary,
+
   },
   titleContainer: {
     marginTop: 5,
