@@ -1,7 +1,9 @@
 import { dataType } from "@/data/appData";
 import colors from "@/styles/colors";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
+
 
 // declare data type for props here
 /*
@@ -15,17 +17,23 @@ type propsType = {
   onPress: (item: dataType) => void;
 }
 
+const selectedList = (item: dataType) => {
+  console.log(item.title);
+  setSelectedId(item.id);
+};
+const [selectedId, setSelectedId] = useState<string>("1");
+
 const ListItem: React.FC<propsType> = ({item, isSelected, onPress}) => {
-  return  <TouchableOpacity onPress={() =>selectedList(item)}>
+  return  <TouchableOpacity onPress={() => selectedList(item)}>
               <View style={[styles.flatlistRow, 
                 {
-                  backgroundColor: item.id === selectedId
+                  backgroundColor: isSelected
                   ? colors.primary : colors.secondary,
                 }
               ]}>
                 <Text style={[styles.titleText, 
                   {
-                    color: item.id === selectedId ? colors.theme.light.text : colors.theme.dark.text
+                    color: isSelected ? colors.theme.light.text : colors.theme.dark.text
                   }
                 ]}>{item.title}</Text>
               </View>
